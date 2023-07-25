@@ -1,0 +1,26 @@
+{
+	"manifest_version": 2,
+	"name": "Bring Twitter Bird Back",
+	"version": "1.0",
+  
+	"description": "Replaces the new Twitter logo with the old one.",
+  
+	"icons": {
+	  "48": "icons/icon.png",
+	  "96": "icons/icon@2x.png"
+	},
+  
+	"content_scripts": [
+	  {
+		"matches": ["*://*.twitter.com/*"],
+		"js": ["bring-twitter-bird-back.js"]
+	  }
+	],
+
+	"web_accessible_resources": [
+		"icons/favicon.ico",
+		"icons/icon.png",
+		"icons/icon@2x.png"
+	]
+  }
+  
