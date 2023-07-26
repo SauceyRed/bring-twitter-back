@@ -19,6 +19,7 @@
 
 	"web_accessible_resources": [
 		"icons/favicon.ico",
+		"icons/favicon-notification.ico",
 		"icons/icon.png",
 		"icons/icon@2x.png"
 	]
