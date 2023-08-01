@@ -16,7 +16,7 @@ function updateFavicon(faviconPath = "icons/favicon.ico") {
 		}
 	}
 	const divElements = document.querySelectorAll('div[dir="ltr"][aria-live="polite"]');
-	const regex = new RegExp("^(\\d+)\\sunread\\sitems$");
+	const regex = new RegExp("^(\\d+)\\+?\\sunread\\sitems$");
 	for (let i = 0; i < divElements.length; i++) {
 		if (regex.test(divElements[i].getAttribute("aria-label"))) {
 			faviconPath = "icons/favicon-notification.ico";
