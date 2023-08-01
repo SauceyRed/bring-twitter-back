@@ -22,6 +22,11 @@
 		"icons/favicon-notification.ico",
 		"icons/icon.png",
 		"icons/icon@2x.png"
-	]
-  }
+	],
+	"browser_specific_settings": {
+		"gecko": {
+		  "id": "{1af1a448-95f4-46c6-b093-078ea1023f81}"
+		}
+	}
+}
   
