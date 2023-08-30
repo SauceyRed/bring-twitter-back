@@ -1,22 +1,18 @@
 {
 	"manifest_version": 2,
 	"name": "Bring Twitter Bird Back",
-	"version": "1.2.1",
-  
-	"description": "Replaces the new Twitter logo with the old one.",
-  
+	"version": "2.0.0",
+	"description": "Turns X back to Twitter.",
 	"icons": {
-	  "48": "icons/icon.png",
-	  "96": "icons/icon@2x.png"
+		"48": "icons/icon.png",
+		"96": "icons/icon@2x.png"
 	},
-  
 	"content_scripts": [
-	  {
-		"matches": ["*://*.twitter.com/*"],
-		"js": ["bring-twitter-bird-back.js"]
-	  }
+		{
+			"matches": ["*://*.twitter.com/*"],
+			"js": ["bring-twitter-bird-back.js"]
+		}
 	],
-
 	"web_accessible_resources": [
 		"icons/favicon.ico",
 		"icons/favicon-notification.ico",
@@ -25,8 +21,7 @@
 	],
 	"browser_specific_settings": {
 		"gecko": {
-		  "id": "{1af1a448-95f4-46c6-b093-078ea1023f81}",
-		  "update_url": "https://github.com/SauceyRed/bring-twitter-bird-back/blob/main/updates.json"
+		  "id": "{1af1a448-95f4-46c6-b093-078ea1023f81}"
 		}
 	}
 }
