@@ -21,7 +21,8 @@
 	],
 	"browser_specific_settings": {
 		"gecko": {
-		  "id": "{1af1a448-95f4-46c6-b093-078ea1023f81}"
+		  "id": "{1af1a448-95f4-46c6-b093-078ea1023f81}",
+		  "update_url": "https://github.com/SauceyRed/bring-twitter-bird-back/blob/main/updates.json"
 		}
 	}
 }
