@@ -56,7 +56,12 @@ function updateTitle() {
 		} else if (tabTitle == "X") {
 			tabTitle = tabTitle.replace("X", "Twitter");
 		}
-		titleElement.textContent = tabTitle;
+
+		if (tabTitle.includes(" on X: ")) {
+			tabTitle = tabTitle.replace(" on X: ", " on Twitter: ");
+		}
+
+		document.title = tabTitle;
 	}
 }
 
@@ -154,11 +159,13 @@ metaObserver.observe(document.head, { childList: true, subtree: true });
 
 const titleCallback = (mutationList, observer) => {
 	for (let mutation of mutationList) {
+		titleObserver.disconnect();
 		updateTitle();
+		titleObserver.observe(document.querySelector("title"), { childList: true });
 	}
 }
 const titleObserver = new MutationObserver(titleCallback);
 
 function startTitleObserver() {
-	titleObserver.observe(document.querySelector("title"), { childList: true, subtree: true });
+	titleObserver.observe(document.querySelector("title"), { childList: true });
 }
