@@ -14,9 +14,10 @@ const querySelectorInput = 'path[d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H1
 const navTweetButtonSelector = 'a[data-testid="SideNav_NewTweet_Button"]';
 const inlineTweetButtonSelector = 'div[data-testid="tweetButtonInline"]';
 const retweetSelector = 'div[data-testid="retweetConfirm"]';
-const quoteRetweetSelector = 'a[href="/compose/tweet"][role="menuitem"]';
+const quoteTweetSelector = 'a[href="/compose/tweet"][role="menuitem"]';
 const retweetsTrackerSelector = 'div[role="group"]';
 const tweetComposerSelector = 'div[data-viewportview="true"]';
+const profileTweetsTextSelector = 'a[role="tab"]';
 
 var notificationObserverConnected = false;
 
@@ -109,10 +110,10 @@ const bodyCallback = (mutationList, observer) => {
 			}
 		}
 
-		if (document.querySelector(quoteRetweetSelector)) {
-			let quoteRetweetButton = document.querySelector(quoteRetweetSelector).getElementsByTagName("span")[0];
-			if (quoteRetweetButton && quoteRetweetButton.textContent == "Quote") {
-				quoteRetweetButton.textContent = "Quote Tweet";
+		if (document.querySelector(quoteTweetSelector)) {
+			let quoteTweetButton = document.querySelector(quoteTweetSelector).getElementsByTagName("span")[0];
+			if (quoteTweetButton && quoteTweetButton.textContent == "Quote") {
+				quoteTweetButton.textContent = "Quote Tweet";
 			}
 		}
 		
@@ -120,6 +121,13 @@ const bodyCallback = (mutationList, observer) => {
 			let repostsText = document.querySelector(retweetsTrackerSelector).getElementsByTagName("span")[3]
 			if (repostsText && repostsText.textContent == "Reposts") {
 				repostsText.textContent = "Retweets";
+			}
+		}
+
+		if (document.querySelector(profileTweetsTextSelector)) {
+			let profileTweets = document.querySelector(profileTweetsTextSelector).querySelector("span");
+			if (profileTweets && profileTweets.textContent == "Posts") {
+				profileTweets.textContent = "Tweets";	
 			}
 		}
 	}
