@@ -18,6 +18,7 @@ const quoteTweetSelector = 'a[href="/compose/tweet"][role="menuitem"]';
 const retweetsTrackerSelector = 'div[role="group"]';
 const tweetComposerSelector = 'div[data-viewportview="true"]';
 const profileTweetsTextSelector = 'a[role="tab"]';
+const tweetPostTitleSelector = 'h2[dir="ltr"][aria-level="2"][role="heading"]';
 
 var notificationObserverConnected = false;
 
@@ -128,6 +129,13 @@ const bodyCallback = (mutationList, observer) => {
 			let profileTweets = document.querySelector(profileTweetsTextSelector).querySelector("span");
 			if (profileTweets && profileTweets.textContent == "Posts") {
 				profileTweets.textContent = "Tweets";	
+			}
+		}
+
+		if (document.querySelectorAll(tweetPostTitleSelector) && document.querySelectorAll(tweetPostTitleSelector)[1]) {
+			let tweetPostTitle = document.querySelectorAll(tweetPostTitleSelector)[1].querySelector("span")
+			if (tweetPostTitle && tweetPostTitle.textContent == "Post") {
+				tweetPostTitle.textContent = "Tweet";
 			}
 		}
 	}
