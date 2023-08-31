@@ -1,6 +1,6 @@
 {
 	"manifest_version": 2,
-	"name": "Bring Twitter Bird Back",
+	"name": "Bring Twitter Back",
 	"version": "2.1.0",
 	"description": "Turns X back to Twitter.",
 	"icons": {
