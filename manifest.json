@@ -10,7 +10,7 @@
 	"content_scripts": [
 		{
 			"matches": ["*://*.twitter.com/*"],
-			"js": ["bring-twitter-bird-back.js"]
+			"js": ["bring-twitter-back.js"]
 		}
 	],
 	"web_accessible_resources": [
