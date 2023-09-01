@@ -62,6 +62,10 @@ function updateTitle() {
 		if (tabTitle.includes(" on X: ")) {
 			tabTitle = tabTitle.replace(" on X: ", " on Twitter: ");
 		}
+		
+		if (tabTitle.includes("X. It’s what’s happening")) {
+			tabTitle = tabTitle.replace("X. It’s what’s happening", "Twitter. It’s what’s happening");
+		}
 
 		document.title = tabTitle;
 	}
