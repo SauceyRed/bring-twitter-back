@@ -9,7 +9,7 @@
 	},
 	"content_scripts": [
 		{
-			"matches": ["*://*.twitter.com/*"],
+			"matches": ["*://*.twitter.com/*", "*://*.x.com/*"],
 			"js": ["bring-twitter-back.js"]
 		}
 	],
