@@ -21,7 +21,7 @@ const retweetsTrackerSelector = 'div[role="group"]';
 const tweetComposerSelector = 'div[data-viewportview="true"]';
 const profileTweetsTextSelector = 'a[role="tab"]';
 const tweetPostTitleSelector = 'h2[dir="ltr"][aria-level="2"][role="heading"]';
-const loginFooterSelector = 'span[class="css-1jxf684 r-bcqeeo r-1ttztb7 r-qvutc0 r-poiln3"]';
+const loginFooterSelector = 'nav[class="css-175oi2r r-18u37iz r-1w6e6rj r-3pj75a r-1777fci r-1mmae3n"]';
 const cookieBannerSelector = 'div[class="css-146c3p1 r-bcqeeo r-1ttztb7 r-qvutc0 r-1qd0xha r-n6v787 r-1cwl3u0 r-16dba41 r-5oul0u r-knv0ih"]';
 const loadingLogoSelector = 'svg[class="r-4qtqp9 r-yyyyoo r-dnmrzs r-lrvibr r-m6rgpd r-1p0dtai r-1nao33i r-wy61xf r-zchlnj r-1d2f490 r-ywje51 r-u8s1d r-ipm5af r-1blnp2b"] path';
 
@@ -157,19 +157,18 @@ const bodyCallback = (mutationList, observer) => {
 			}
 		}
 
-		/*
-		const loginFooterResult = document.querySelectorAll(loginFooterSelector);
+		const loginFooterResult = document.querySelector(loginFooterSelector);
 		if (loginFooterResult) {
-			for (result of loginFooterResult) {
+			for (result of loginFooterResult.childNodes) {
 				if (result.textContent.includes("X")) {
 					result.textContent = result.textContent.replace("X", "Twitter");
 				}
 			}
 		}
-		*/
+
 		const cookieBannerResult = document.querySelector(cookieBannerSelector);
 		if (cookieBannerResult && cookieBannerResult.textContent.includes("X")) {
-			cookieBannerResult.textContent = cookieBannerResult.textContent.replace("X", "Twitter");
+			cookieBannerResult.textContent = cookieBannerResult.textContent.replaceAll("X", "Twitter");
 		}
 	}
 }
