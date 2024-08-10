@@ -10,7 +10,8 @@
 	"content_scripts": [
 		{
 			"matches": ["*://*.twitter.com/*", "*://*.x.com/*"],
-			"js": ["bring-twitter-back.js"]
+			"js": ["index.js"],
+			"run_at": "document_start"
 		}
 	],
 	"web_accessible_resources": [
