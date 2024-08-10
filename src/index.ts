@@ -25,6 +25,7 @@ const cookieBannerSelector = 'div[class="css-146c3p1 r-bcqeeo r-1ttztb7 r-qvutc0
 const loadingLogoSelector = 'svg[class="r-4qtqp9 r-yyyyoo r-dnmrzs r-lrvibr r-m6rgpd r-1p0dtai r-1nao33i r-wy61xf r-zchlnj r-1d2f490 r-ywje51 r-u8s1d r-ipm5af r-1blnp2b"] path';
 const retweetPostOptionsSelector = '[class="css-146c3p1 r-bcqeeo r-1ttztb7 r-qvutc0 r-1qd0xha r-a023e6 r-rjixqe r-b88u0q"]';
 const deletedTweetAlertSelector = 'div[role="alert"][data-testid="toast"]';
+const timelineSelector = 'div[aria-label="Timeline: Your Home Timeline"]';
 
 let notificationObserverConnected = false;
 let logoObserverConnected = false;
@@ -245,9 +246,23 @@ const bodyCallback = (mutationList: MutationRecord[], observer: MutationObserver
 		const deletedTweetAlertResult = document.querySelector(deletedTweetAlertSelector);
 		if (deletedTweetAlertResult) {
 			const span = deletedTweetAlertResult.getElementsByTagName("span")[0];
-			if (!span.textContent) { continue; }
+			if (!span || !span.textContent) { continue; }
 			if (span.textContent.includes("post")) {
 				span.textContent = span.textContent.replace("post", "tweet");
+			}
+		}
+
+		const timelineResult = document.querySelector(timelineSelector);
+		if (timelineResult) {
+			console.log("ayo");
+			const buttons = timelineResult.getElementsByTagName("span");
+			if (buttons.length == 0) {
+				log("No timeline buttons");
+			} else {
+				console.log("hi");
+				if (buttons[0].textContent && buttons[0].textContent.includes("posts")) {
+					buttons[0].textContent = buttons[0].textContent.replace("posts", "tweets");
+				}
 			}
 		}
 	}
