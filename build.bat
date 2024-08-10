@@ -8,12 +8,12 @@ if exist %CHROMIUM_ARCHIVE% echo "Deleting existing Chromium archive" & del %CHR
 
 echo "Archiving %FIREFOX_ARCHIVE%"
 copy manifest-v2.json manifest.json /y
-.\7zip\cmd\7za.exe a -tzip ".\builds\%FIREFOX_ARCHIVE%" .\icons .\bring-twitter-back.js .\LICENSE .\manifest.json
+.\7zip\cmd\7za.exe a -tzip ".\builds\%FIREFOX_ARCHIVE%" .\dist\index.js .\icons .\LICENSE .\manifest.json
 echo "Archived %FIREFOX_ARCHIVE%"
 
 echo "Archiving %CHROMIUM_ARCHIVE%"
 copy manifest-v3.json manifest.json /y
-.\7zip\cmd\7za.exe a -tzip ".\builds\%CHROMIUM_ARCHIVE%" .\icons .\bring-twitter-back.js .\LICENSE .\manifest.json
+.\7zip\cmd\7za.exe a -tzip ".\builds\%CHROMIUM_ARCHIVE%" .\dist\index.js .\icons .\LICENSE .\manifest.json
 echo "Archived %CHROMIUM_ARCHIVE%"
 
 del manifest.json

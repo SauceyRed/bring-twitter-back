@@ -13,12 +13,12 @@ fi
 
 echo "Archiving $FIREFOX_ARCHIVE"
 cp manifest-v2.json manifest.json
-./7zip/bash/7zzs a -tzip "./builds/$FIREFOX_ARCHIVE" ./icons ./bring-twitter-back.js ./LICENSE ./manifest.json
+./7zip/bash/7zzs a -tzip "./builds/$FIREFOX_ARCHIVE" ./dist/index.js ./icons ./LICENSE ./manifest.json
 echo "Archived $FIREFOX_ARCHIVE"
 
 echo "Archiving $CHROMIUM_ARCHIVE"
 cp manifest-v3.json manifest.json
-./7zip/bash/7zzs a -tzip "./builds/$CHROMIUM_ARCHIVE" ./icons ./bring-twitter-back.js ./LICENSE ./manifest.json
+./7zip/bash/7zzs a -tzip "./builds/$CHROMIUM_ARCHIVE" ./dist/index.js ./icons ./LICENSE ./manifest.json
 echo "Archived $CHROMIUM_ARCHIVE"
 
 rm manifest.json
