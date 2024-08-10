@@ -5,8 +5,7 @@ This Source Code Form is subject to the terms of the Mozilla Public License, v. 
 If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 */
 
-
-console.log("Bring Twitter Bird Back extension has loaded.");
+console.log("Bring Twitter Back extension has loaded.");
 
 const twitterLogoD = "M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12 1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043 2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737 4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z";
 
@@ -27,13 +26,26 @@ const loadingLogoSelector = 'svg[class="r-4qtqp9 r-yyyyoo r-dnmrzs r-lrvibr r-m6
 const retweetPostOptionsSelector = '[class="css-146c3p1 r-bcqeeo r-1ttztb7 r-qvutc0 r-1qd0xha r-a023e6 r-rjixqe r-b88u0q"]';
 const deletedTweetAlertSelector = 'div[role="alert"][data-testid="toast"]';
 
-var notificationObserverConnected = false;
+let notificationObserverConnected = false;
+let logoObserverConnected = false;
+
+const loggingKey = "bringTwitterBack.loggingEnabled";
+if (!localStorage.getItem(loggingKey)) {
+	localStorage.setItem(loggingKey, "false");
+}
 
 function delay(ms: number): Promise<void> {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function updateFavicon(faviconPath = "icons/favicon.ico") {
+function log(message: string) {
+	// @ts-ignore
+	if (localStorage.getItem(loggingKey) == "true") {
+		console.log(message);
+	}
+}
+
+function updateFavicon(faviconPath = "icons/favicon.ico") {
 	// Iterates through <link> elements to find the icon, then removes it.
 	const elements = document.getElementsByTagName("link");
 	for (let i = 0; i < elements.length; i++) {
@@ -43,18 +55,17 @@ async function updateFavicon(faviconPath = "icons/favicon.ico") {
 	}
 	const divElements = document.querySelectorAll('div[dir="ltr"][aria-live="polite"]');
 	if (divElements.length == 0) {
-		await delay(500);
-		return updateFavicon();
+		return log("divElements not found");
 	}
+	log("divElements found");
 	const regex = /^(\\d+)\\+?\\sunread\\sitems$/;
 	for (let i = 0; i < divElements.length; i++) {
 		const attribute = divElements[i].getAttribute("aria-label");
 		if (divElements && attribute && regex.test(attribute)) {
-			faviconPath = "icons/favicon-notification.ico";
+			faviconPath = "../icons/favicon-notification.ico";
 		}
 	}
 	const faviconURL = typeof chrome != "undefined" ? chrome.runtime.getURL(faviconPath) : browser.runtime.getURL(faviconPath);
-	console.log(faviconURL);
 	// Creates new <link> element for the icon.
 	const favicon = document.createElement("link");
 	favicon.setAttribute("rel", "shortcut icon");
@@ -65,14 +76,14 @@ async function updateFavicon(faviconPath = "icons/favicon.ico") {
 updateFavicon();
 
 
-async function updateTitle() {
+function updateTitle() {
 	let titleElement = document.querySelector("title");
 	
 	if (!titleElement) {
-		await delay(500);
-		return updateTitle();
+		return log("titleElement not found");
 	}
 
+	log("titleElement found");
 	let tabTitle = titleElement.textContent;
 	if (tabTitle && tabTitle.includes("X")) {
 		if (tabTitle.includes(" / X")) {
@@ -95,13 +106,16 @@ async function updateTitle() {
 
 updateTitle();
 
-async function updateLogo() {
+function updateLogo() {
 	const loadingLogo = document.querySelector(loadingLogoSelector);
 	if (!loadingLogo) {
-		await delay(500);
-		return updateLogo();
+		log("loadingLogo not found");
+		return
 	}
-	loadingLogo.setAttribute("d", twitterLogoD);
+	log("loadingLogo found");
+	if (loadingLogo) {
+		loadingLogo.setAttribute("d", twitterLogoD);
+	}
 }
 
 updateLogo();
@@ -128,6 +142,12 @@ const bodyCallback = (mutationList: MutationRecord[], observer: MutationObserver
 			}
 		}
 
+		if (document.querySelector(loadingLogoSelector)) {
+			if (!logoObserverConnected) {
+				startLogoObserver();
+			}
+		}
+
 		const tweetButtonsSelectorResults = document.querySelectorAll(tweetButtonsSelector);
 		if (tweetButtonsSelectorResults) {
 			for (const result of tweetButtonsSelectorResults) {
@@ -143,7 +163,7 @@ const bodyCallback = (mutationList: MutationRecord[], observer: MutationObserver
 		const homeTweetButtonResult = document.querySelector(homeTweetButtonSelector);
 		if (homeTweetButtonResult) {
 			const homeTweetButton = homeTweetButtonResult.getElementsByTagName("span")[1];
-			if (homeTweetButton.textContent == "Post") {
+			if (homeTweetButton && homeTweetButton.textContent == "Post") {
 				homeTweetButton.textContent = "Tweet";
 			}
 		}
@@ -151,7 +171,7 @@ const bodyCallback = (mutationList: MutationRecord[], observer: MutationObserver
 		const tweetComposerButtonResult = document.querySelector(tweetComposerButtonSelector);
 		if (tweetComposerButtonResult) {
 			const tweetButton = tweetComposerButtonResult.getElementsByTagName("span")[1];
-			if (tweetButton.textContent == "Post") {
+			if (tweetButton && tweetButton && tweetButton.textContent == "Post") {
 				tweetButton.textContent = "Tweet";
 			}
 		}
@@ -159,7 +179,7 @@ const bodyCallback = (mutationList: MutationRecord[], observer: MutationObserver
 		const retweetResult = document.querySelector(retweetSelector);
 		if (retweetResult) {
 			const retweetButton = retweetResult.getElementsByTagName("span")[0];
-			if (retweetButton.textContent == "Repost") {
+			if (retweetButton && retweetButton.textContent == "Repost") {
 				retweetButton.textContent = "Retweet";
 			}
 		}
@@ -233,12 +253,7 @@ const bodyCallback = (mutationList: MutationRecord[], observer: MutationObserver
 	}
 }
 
-
 const bodyObserver = new MutationObserver(bodyCallback);
-
-// Creates and initiates an observer.
-bodyObserver.observe(document.body, { childList: true, subtree: true });
-
 
 const notificationCallback = (mutationList: MutationRecord[], observer: MutationObserver) => {
 	for (let mutation of mutationList) {
@@ -262,8 +277,6 @@ const metaObserverCallback = (mutationList: MutationRecord[], observer: Mutation
 	}
 }
 const metaObserver = new MutationObserver(metaObserverCallback);
-metaObserver.observe(document.head, { childList: true, subtree: true });
-
 
 const titleCallback = (mutationList: MutationRecord[], observer: MutationObserver) => {
 	for (let mutation of mutationList) {
@@ -280,10 +293,37 @@ function startTitleObserver() {
 
 const loadingLogoObserverCallback = (mutationList: MutationRecord[], observer: MutationObserver) => {
 	for (let mutation of mutationList) {
-		console.log("CHANGE");
 		updateLogo();
-		loadingLogoObserver.disconnect();
+		const loadingLogo = document.querySelector(loadingLogoSelector);
+		if (loadingLogo) {
+			if (loadingLogo && loadingLogo.getAttribute("d") == twitterLogoD) {
+				log("Logo is Twitter logo");
+				loadingLogoObserver.disconnect();
+			} else {
+				log("Logo has no path");
+			}
+		} else {
+			log("Logo is not Twitter logo");
+		}
 	}
 }
 const loadingLogoObserver = new MutationObserver(loadingLogoObserverCallback);
-loadingLogoObserver.observe(document.querySelector(loadingLogoSelector)!, { childList: true, subtree: true });
+
+function startLogoObserver() {
+	loadingLogoObserver.observe(document.querySelector(loadingLogoSelector)!, { childList: true, subtree: true });
+	logoObserverConnected = true;
+	log("Started logo observer");
+}
+
+(async () => {
+	while (true) {
+		if (document.body) {
+			log("Document body found")
+			bodyObserver.observe(document.body, { childList: true, subtree: true });
+			metaObserver.observe(document.head, { childList: true, subtree: true });
+			log("Observers started");
+			break;
+		}
+		await delay(100);
+	}
+})();
