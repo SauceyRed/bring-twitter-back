@@ -1,1 +1,4 @@
-./builds
+/builds
+.gitignore
+/node_modules
+/dist
