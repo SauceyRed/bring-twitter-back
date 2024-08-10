@@ -13,10 +13,10 @@ const twitterLogoD = "M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.4
 // Defines selectors for elements.
 const querySelectorInput = 'path[d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"]';
 const notificationsSelector = 'a[href="/notifications"][role="link"]';
-const navTweetButtonSelector = 'a[data-testid="SideNav_NewTweet_Button"]';
-const inlineTweetButtonSelector = 'div[data-testid="tweetButtonInline"]';
+const tweetButtonsSelector = 'a[href="/compose/post"]';
+const homeTweetButtonSelector = '[data-testid="tweetButtonInline"]';
+const tweetComposerButtonSelector = 'button[data-testid="tweetButton"]';
 const retweetSelector = 'div[data-testid="retweetConfirm"]';
-const quoteTweetSelector = 'a[href="/compose/tweet"][role="menuitem"]';
 const retweetsTrackerSelector = 'div[role="group"]';
 const tweetComposerSelector = 'div[data-viewportview="true"]';
 const profileTweetsTextSelector = 'a[role="tab"]';
@@ -24,7 +24,8 @@ const tweetPostTitleSelector = 'h2[dir="ltr"][aria-level="2"][role="heading"]';
 const loginFooterSelector = 'nav[class="css-175oi2r r-18u37iz r-1w6e6rj r-3pj75a r-1777fci r-1mmae3n"]';
 const cookieBannerSelector = 'div[class="css-146c3p1 r-bcqeeo r-1ttztb7 r-qvutc0 r-1qd0xha r-n6v787 r-1cwl3u0 r-16dba41 r-5oul0u r-knv0ih"]';
 const loadingLogoSelector = 'svg[class="r-4qtqp9 r-yyyyoo r-dnmrzs r-lrvibr r-m6rgpd r-1p0dtai r-1nao33i r-wy61xf r-zchlnj r-1d2f490 r-ywje51 r-u8s1d r-ipm5af r-1blnp2b"] path';
-const retweetPostOptions = '[class="css-146c3p1 r-bcqeeo r-1ttztb7 r-qvutc0 r-1qd0xha r-a023e6 r-rjixqe r-b88u0q"]';
+const retweetPostOptionsSelector = '[class="css-146c3p1 r-bcqeeo r-1ttztb7 r-qvutc0 r-1qd0xha r-a023e6 r-rjixqe r-b88u0q"]';
+const deletedTweetAlertSelector = 'div[role="alert"][data-testid="toast"]';
 
 var notificationObserverConnected = false;
 
@@ -85,7 +86,7 @@ const bodyCallback = (mutationList, observer) => {
 	for (let mutation of mutationList) {
 		const querySelectorResult = document.querySelector(querySelectorInput);
 		if (querySelectorResult) {
-			var logoSvg = querySelectorResult.parentNode.parentNode;
+			const logoSvg = querySelectorResult.parentNode.parentNode;
 			logoSvg.getElementsByTagName("path")[0].setAttribute("d", twitterLogoD);
 			logoSvg.setAttribute("viewBox", "0 0 24 24");
 
@@ -102,50 +103,54 @@ const bodyCallback = (mutationList, observer) => {
 			}
 		}
 
-		const navTweetButtonResult = document.querySelector(navTweetButtonSelector);
-		if (navTweetButtonResult) {
-			let navTweetButton = navTweetButtonResult.getElementsByTagName("span")[2];
-			if (navTweetButton.textContent == "Post") {
-				navTweetButton.textContent = "Tweet";
+		const tweetButtonsSelectorResults = document.querySelectorAll(tweetButtonsSelector);
+		if (tweetButtonsSelectorResults) {
+			for (const result of tweetButtonsSelectorResults) {
+				const spans = document.getElementsByTagName("span");
+				for (const span of spans) {
+					if (span.textContent == "Post") {
+						span.textContent = "Tweet";
+					}
+				}
 			}
 		}
 
-		const inlineTweetButtonResult = document.querySelector(inlineTweetButtonSelector);
-		if (inlineTweetButtonResult) {
-			let inlineTweetButton = inlineTweetButtonResult.getElementsByTagName("span")[1];
-			if (inlineTweetButton.textContent == "Post") {
-				inlineTweetButton.textContent = "Tweet";
+		const homeTweetButtonResult = document.querySelector(homeTweetButtonSelector);
+		if (homeTweetButtonResult) {
+			const homeTweetButton = homeTweetButtonResult.getElementsByTagName("span")[1];
+			if (homeTweetButton.textContent == "Post") {
+				homeTweetButton.textContent = "Tweet";
+			}
+		}
+
+		const tweetComposerButtonResult = document.querySelector(tweetComposerButtonSelector);
+		if (tweetComposerButtonResult) {
+			const tweetButton = tweetComposerButtonResult.getElementsByTagName("span")[1];
+			if (tweetButton.textContent == "Post") {
+				tweetButton.textContent = "Tweet";
 			}
 		}
 
 		const retweetResult = document.querySelector(retweetSelector);
 		if (retweetResult) {
-			let retweetButton = retweetResult.getElementsByTagName("span")[0];
+			const retweetButton = retweetResult.getElementsByTagName("span")[0];
 			if (retweetButton.textContent == "Repost") {
 				retweetButton.textContent = "Retweet";
-			}
-		}
-
-		const quoteTweetResult = document.querySelector(quoteTweetSelector);
-		if (quoteTweetResult) {
-			let quoteTweetButton = quoteTweetResult.getElementsByTagName("span")[0];
-			if (quoteTweetButton && quoteTweetButton.textContent == "Quote") {
-				quoteTweetButton.textContent = "Quote Tweet";
 			}
 		}
 		
 		const tweetComposerResult = document.querySelector(tweetComposerSelector);
 		const retweetsTrackerResult = document.querySelector(retweetsTrackerSelector);
 		if (!tweetComposerResult && retweetsTrackerResult) {
-			let repostsText = retweetsTrackerResult.getElementsByTagName("span")[3]
-			if (repostsText && repostsText.textContent == "Reposts") {
-				repostsText.textContent = "Retweets";
+			const repostsSpan = retweetsTrackerResult.getElementsByTagName("span")[3]
+			if (repostsSpan && repostsSpan.textContent == "Reposts") {
+				repostsSpan.textContent = "Retweets";
 			}
 		}
 
 		const profileTweetsTextResult = document.querySelector(profileTweetsTextSelector);
 		if (profileTweetsTextResult) {
-			let profileTweets = profileTweetsTextResult.querySelector("span");
+			const profileTweets = profileTweetsTextResult.querySelector("span");
 			if (profileTweets && profileTweets.textContent == "Posts") {
 				profileTweets.textContent = "Tweets";	
 			}
@@ -153,9 +158,27 @@ const bodyCallback = (mutationList, observer) => {
 
 		const tweetPostTitleResult = document.querySelectorAll(tweetPostTitleSelector);
 		if (tweetPostTitleResult && tweetPostTitleResult[1]) {
-			let tweetPostTitle = tweetPostTitleResult[1].querySelector("span")
+			const tweetPostTitle = tweetPostTitleResult[1].getElementsByTagName("span")[0];
 			if (tweetPostTitle && tweetPostTitle.textContent == "Post") {
 				tweetPostTitle.textContent = "Tweet";
+			}
+		}
+
+		const retweetPostOptionsResults = document.querySelectorAll(retweetPostOptionsSelector);
+		if (retweetPostOptionsResults) {
+			for (const result of retweetPostOptionsResults) {
+				const span = result.childNodes[0];
+				switch (span.textContent) {
+					case "Repost":
+						span.textContent = "Retweet";
+						break;
+					case "Quote":
+						span.textContent = "Quote Tweet";
+						break;
+					case "View Quotes":
+						span.textContent = span.textContent.replace("View Quotes", "View Retweets");
+						break;
+				}
 			}
 		}
 
@@ -171,6 +194,14 @@ const bodyCallback = (mutationList, observer) => {
 		const cookieBannerResult = document.querySelector(cookieBannerSelector);
 		if (cookieBannerResult && cookieBannerResult.textContent.includes("X")) {
 			cookieBannerResult.textContent = cookieBannerResult.textContent.replaceAll("X", "Twitter");
+		}
+
+		const deletedTweetAlertResult = document.querySelector(deletedTweetAlertSelector);
+		if (deletedTweetAlertResult) {
+			const span = deletedTweetAlertResult.getElementsByTagName("span")[0];
+			if (span.textContent.includes("post")) {
+				span.textContent = span.textContent.replace("post", "tweet");
+			}
 		}
 	}
 }
