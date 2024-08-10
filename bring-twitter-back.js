@@ -19,6 +19,10 @@ const retweetsTrackerSelector = 'div[role="group"]';
 const tweetComposerSelector = 'div[data-viewportview="true"]';
 const profileTweetsTextSelector = 'a[role="tab"]';
 const tweetPostTitleSelector = 'h2[dir="ltr"][aria-level="2"][role="heading"]';
+const loginFooterSelector = 'nav[class="css-175oi2r r-18u37iz r-1w6e6rj r-3pj75a r-1777fci r-1mmae3n"]';
+const cookieBannerSelector = 'div[class="css-146c3p1 r-bcqeeo r-1ttztb7 r-qvutc0 r-1qd0xha r-n6v787 r-1cwl3u0 r-16dba41 r-5oul0u r-knv0ih"]';
+const loadingLogoSelector = 'svg[class="r-4qtqp9 r-yyyyoo r-dnmrzs r-lrvibr r-m6rgpd r-1p0dtai r-1nao33i r-wy61xf r-zchlnj r-1d2f490 r-ywje51 r-u8s1d r-ipm5af r-1blnp2b"] path';
+const retweetPostOptions = '[class="css-146c3p1 r-bcqeeo r-1ttztb7 r-qvutc0 r-1qd0xha r-a023e6 r-rjixqe r-b88u0q"]';
 
 var notificationObserverConnected = false;
 
@@ -32,14 +36,15 @@ function updateFavicon(faviconPath = "icons/favicon.ico") {
 		}
 	}
 	const divElements = document.querySelectorAll('div[dir="ltr"][aria-live="polite"]');
-	const regex = new RegExp("^(\\d+)\\+?\\sunread\\sitems$");
+	const regex = /^(\\d+)\\+?\\sunread\\sitems$/;
 	for (let i = 0; i < divElements.length; i++) {
 		if (regex.test(divElements[i].getAttribute("aria-label"))) {
 			faviconPath = "icons/favicon-notification.ico";
 		}
 	}
+	const faviconURL = typeof chrome != "undefined" ? chrome.runtime.getURL(faviconPath) : browser.runtime.getURL(faviconPath);
+	console.log(faviconURL);
 	// Creates new <link> element for the icon.
-	const faviconURL = browser.runtime.getURL(faviconPath)
 	const favicon = document.createElement("link");
 	favicon.setAttribute("rel", "shortcut icon");
 	favicon.setAttribute("href", faviconURL);
