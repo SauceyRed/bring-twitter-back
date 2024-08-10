@@ -1,0 +1,30 @@
+{
+	"manifest_version": 3,
+	"name": "Bring Twitter Back",
+	"version": "2.3.0",
+	"description": "Turns X back to Twitter.",
+	"icons": {
+		"48": "icons/icon.png",
+		"96": "icons/icon@2x.png"
+	},
+	"content_scripts": [
+		{
+			"matches": ["*://*.twitter.com/*", "*://*.x.com/*"],
+			"js": ["index.js"]
+		}
+	],
+	"web_accessible_resources": [
+		{
+			"resources": [
+				"icons/favicon.ico",
+				"icons/favicon-notification.ico",
+				"icons/icon.png",
+				"icons/icon@2x.png"
+			],
+			"matches": [
+				"*://*.twitter.com/*",
+				"*://*.x.com/*"
+			]
+		}
+	]
+}
