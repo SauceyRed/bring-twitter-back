@@ -118,7 +118,7 @@ updateLogo();
 
 // When one of the selectors is found, replaces the svg, then disconnects the observer.
 const bodyCallback = (mutationList: MutationRecord[], observer: MutationObserver) => {
-	for (let mutation of mutationList) {
+	for (let _ of mutationList) {
 		const querySelectorResult = document.querySelector(querySelectorInput);
 		if (querySelectorResult && querySelectorResult.parentElement && querySelectorResult.parentElement.parentElement) {
 			const logoSvg = querySelectorResult.parentElement.parentElement;
@@ -268,8 +268,8 @@ const bodyCallback = (mutationList: MutationRecord[], observer: MutationObserver
 
 const bodyObserver = new MutationObserver(bodyCallback);
 
-const notificationCallback = (mutationList: MutationRecord[], observer: MutationObserver) => {
-	for (let mutation of mutationList) {
+const notificationCallback = (mutationList: MutationRecord[]) => {
+	for (let _ of mutationList) {
 		updateFavicon();
 	}
 }
@@ -281,8 +281,8 @@ function startNotificationObserver() {
 }
 
 
-const metaObserverCallback = (mutationList: MutationRecord[], observer: MutationObserver) => {
-	for (let mutation of mutationList) {
+const metaObserverCallback = (mutationList: MutationRecord[]) => {
+	for (let _ of mutationList) {
 		if (document.querySelector("title")) {
 			startTitleObserver();
 			metaObserver.disconnect();
@@ -291,8 +291,8 @@ const metaObserverCallback = (mutationList: MutationRecord[], observer: Mutation
 }
 const metaObserver = new MutationObserver(metaObserverCallback);
 
-const titleCallback = (mutationList: MutationRecord[], observer: MutationObserver) => {
-	for (let mutation of mutationList) {
+const titleCallback = (mutationList: MutationRecord[]) => {
+	for (let _ of mutationList) {
 		titleObserver.disconnect();
 		updateTitle();
 		titleObserver.observe(document.querySelector("title")!, { childList: true });
@@ -304,8 +304,8 @@ function startTitleObserver() {
 	titleObserver.observe(document.querySelector("title")!, { childList: true });
 }
 
-const loadingLogoObserverCallback = (mutationList: MutationRecord[], observer: MutationObserver) => {
-	for (let mutation of mutationList) {
+const loadingLogoObserverCallback = (mutationList: MutationRecord[]) => {
+	for (let _ of mutationList) {
 		updateLogo();
 		const loadingLogo = document.querySelector(loadingLogoSelector);
 		if (loadingLogo) {
