@@ -54,15 +54,14 @@ function updateFavicon(faviconPath = "icons/favicon.ico") {
 		}
 	}
 	const divElements = document.querySelectorAll('div[dir="ltr"][aria-live="polite"]');
-	if (divElements.length == 0) {
-		return log("divElements not found");
-	}
-	log("divElements found");
-	const regex = /^(\\d+)\\+?\\sunread\\sitems$/;
-	for (let i = 0; i < divElements.length; i++) {
-		const attribute = divElements[i].getAttribute("aria-label");
-		if (divElements && attribute && regex.test(attribute)) {
-			faviconPath = "../icons/favicon-notification.ico";
+	if (divElements.length) {
+		log("unread items divElements found");
+		const regex = /^(\\d+)\\+?\\sunread\\sitems$/;
+		for (let i = 0; i < divElements.length; i++) {
+			const attribute = divElements[i].getAttribute("aria-label");
+			if (divElements && attribute && regex.test(attribute)) {
+				faviconPath = "../icons/favicon-notification.ico";
+			}
 		}
 	}
 	const faviconURL = typeof chrome != "undefined" ? chrome.runtime.getURL(faviconPath) : browser.runtime.getURL(faviconPath);
@@ -72,9 +71,6 @@ function updateFavicon(faviconPath = "icons/favicon.ico") {
 	favicon.setAttribute("href", faviconURL);
 	document.head.appendChild(favicon);
 }
-
-updateFavicon();
-
 
 function updateTitle() {
 	let titleElement = document.querySelector("title");
@@ -331,6 +327,11 @@ function startLogoObserver() {
 
 (async () => {
 	while (true) {
+		if (document.head) {
+			log("Document head found");
+			updateFavicon();
+		}
+
 		if (document.body) {
 			log("Document body found")
 			bodyObserver.observe(document.body, { childList: true, subtree: true });
