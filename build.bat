@@ -2,6 +2,8 @@
 set FIREFOX_ARCHIVE=bring-twitter-back-VERSION-firefox.zip
 set CHROMIUM_ARCHIVE=bring-twitter-back-VERSION-chromium.zip
 
+tsc
+
 if exist %FIREFOX_ARCHIVE% echo "Deleting existing Firefox archive" & del %FIREFOX_ARCHIVE%
 
 if exist %CHROMIUM_ARCHIVE% echo "Deleting existing Chromium archive" & del %CHROMIUM_ARCHIVE%

@@ -1,6 +1,9 @@
 FIREFOX_ARCHIVE="bring-twitter-back-VERSION-firefox.zip"
 CHROMIUM_ARCHIVE="bring-twitter-back-VERSION-chromium.zip"
 
+echo "Building project"
+tsc
+
 if [ -e "$FIREFOX_ARCHIVE" ]; then
 	echo "Deleting existing Firefox archive"
 	rm "$FIREFOX_ARCHIVE"
