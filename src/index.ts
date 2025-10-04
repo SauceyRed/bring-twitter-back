@@ -208,7 +208,7 @@ const bodyCallback = (mutationList: MutationRecord[], observer: MutationObserver
 		const retweetPostOptionsResults = document.querySelectorAll(retweetPostOptionsSelector);
 		if (retweetPostOptionsResults) {
 			for (const result of retweetPostOptionsResults) {
-				const span = result.childNodes[0];
+				const span = result.children[0];
 				switch (span.textContent) {
 					case "Repost":
 						span.textContent = "Retweet";
@@ -225,10 +225,13 @@ const bodyCallback = (mutationList: MutationRecord[], observer: MutationObserver
 
 		const loginFooterResult = document.querySelector(loginFooterSelector);
 		if (loginFooterResult) {
-			for (const result of loginFooterResult.childNodes) {
-				if (!result.textContent) { continue; }
-				if (result.textContent.includes("X")) {
-					result.textContent = result.textContent.replace("X", "Twitter");
+			log("found login footer");
+			for (const result of loginFooterResult.children) {
+				if (!result.children.length) { continue; }
+				const span = result.getElementsByTagName("span")[0];
+				if (!span || !span.textContent) { continue; }
+				if (span.textContent.includes("X")) {
+					span.textContent = span.textContent.replace("X", "Twitter");
 				}
 			}
 		}
