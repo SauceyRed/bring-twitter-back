@@ -119,9 +119,9 @@ updateLogo();
 // When one of the selectors is found, replaces the svg, then disconnects the observer.
 const bodyCallback = (mutationList: MutationRecord[], observer: MutationObserver) => {
 	for (let _ of mutationList) {
-		const querySelectorResult = document.querySelector(xLogoSelector);
-		if (querySelectorResult && querySelectorResult.parentElement && querySelectorResult.parentElement.parentElement) {
-			const logoSvg = querySelectorResult.parentElement.parentElement;
+		const xLogoResult = document.querySelector(xLogoSelector);
+		if (xLogoResult && xLogoResult.parentElement && xLogoResult.parentElement.parentElement) {
+			const logoSvg = xLogoResult.parentElement.parentElement;
 			logoSvg.getElementsByTagName("path")[0].setAttribute("d", twitterLogoD);
 			logoSvg.setAttribute("viewBox", "0 0 24 24");
 
