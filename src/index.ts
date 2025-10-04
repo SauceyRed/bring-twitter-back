@@ -40,7 +40,6 @@ function delay(ms: number): Promise<void> {
 }
 
 function log(message: string) {
-	// @ts-ignore
 	if (localStorage.getItem(loggingKey) == "true") {
 		console.log(message);
 	}
