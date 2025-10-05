@@ -22,7 +22,9 @@ const profileTweetsTextSelector = 'a[role="tab"]';
 const tweetPostTitleSelector = 'h2[dir="ltr"][aria-level="2"][role="heading"]';
 const loginFooterSelector = 'nav[class="css-175oi2r r-18u37iz r-1w6e6rj r-3pj75a r-1777fci r-1mmae3n"]';
 const cookieBannerSelector = 'div[class="css-146c3p1 r-bcqeeo r-1ttztb7 r-qvutc0 r-1qd0xha r-n6v787 r-1cwl3u0 r-16dba41 r-5oul0u r-knv0ih"]';
-const loadingLogoSelector = 'svg[class="r-4qtqp9 r-yyyyoo r-dnmrzs r-lrvibr r-m6rgpd r-1p0dtai r-1nao33i r-wy61xf r-zchlnj r-1d2f490 r-ywje51 r-u8s1d r-ipm5af r-1blnp2b"] path';
+const logoSelector = 'svg[class="r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-lrsllp r-1nao33i r-16y2uox r-8kz0gk"] path';
+const loginLogoSelector = 'svg[class="r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-1nao33i r-16y2uox r-lwhw9o"] path';
+const loginSelector = 'h1[data-testid="ocfSettingsListPrimaryText"]';
 const retweetPostOptionsSelector = '[class="css-146c3p1 r-bcqeeo r-1ttztb7 r-qvutc0 r-1qd0xha r-a023e6 r-rjixqe r-b88u0q"]';
 const deletedTweetAlertSelector = 'div[role="alert"][data-testid="toast"]';
 const timelineSelector = 'div[aria-label="Timeline: Your Home Timeline"]';
@@ -76,7 +78,6 @@ function updateFavicon(faviconPath = "icons/favicon.ico") {
 
 updateFavicon();
 
-
 function updateTitle() {
 	let titleElement = document.querySelector("title");
 	
@@ -107,19 +108,17 @@ function updateTitle() {
 
 updateTitle();
 
-function updateLogo() {
-	const loadingLogo = document.querySelector(loadingLogoSelector);
-	if (!loadingLogo) {
-		log("loadingLogo not found");
+function updateLogo(selector = logoSelector) {
+	const logo = document.querySelector(selector);
+	if (!logo) {
+		log("logo not found");
 		return
 	}
-	log("loadingLogo found");
-	if (loadingLogo) {
-		loadingLogo.setAttribute("d", twitterLogoD);
+	log("logo found");
+	if (logo) {
+		logo.setAttribute("d", twitterLogoD);
 	}
 }
-
-updateLogo();
 
 // When one of the selectors is found, replaces the svg, then disconnects the observer.
 const bodyCallback = (mutationList: MutationRecord[], observer: MutationObserver) => {
@@ -143,7 +142,7 @@ const bodyCallback = (mutationList: MutationRecord[], observer: MutationObserver
 			}
 		}
 
-		if (document.querySelector(loadingLogoSelector)) {
+		if (document.querySelector(logoSelector)) {
 			if (!logoObserverConnected) {
 				startLogoObserver();
 			}
@@ -254,16 +253,19 @@ const bodyCallback = (mutationList: MutationRecord[], observer: MutationObserver
 
 		const timelineResult = document.querySelector(timelineSelector);
 		if (timelineResult) {
-			console.log("ayo");
 			const buttons = timelineResult.getElementsByTagName("span");
 			if (buttons.length == 0) {
 				log("No timeline buttons");
 			} else {
-				console.log("hi");
 				if (buttons[0].textContent && buttons[0].textContent.includes("posts")) {
 					buttons[0].textContent = buttons[0].textContent.replace("posts", "tweets");
 				}
 			}
+		}
+
+		const addAccountLoginResult = document.querySelector(loginSelector);
+		if (addAccountLoginResult && addAccountLoginResult.textContent && addAccountLoginResult.textContent.includes("X")) {
+			addAccountLoginResult.textContent = addAccountLoginResult.textContent.replace("X", "Twitter");
 		}
 	}
 }
@@ -306,14 +308,14 @@ function startTitleObserver() {
 	titleObserver.observe(document.querySelector("title")!, { childList: true });
 }
 
-const loadingLogoObserverCallback = (mutationList: MutationRecord[], observer: MutationObserver) => {
+const logoObserverCallback = (mutationList: MutationRecord[], observer: MutationObserver) => {
 	for (let mutation of mutationList) {
-		updateLogo();
-		const loadingLogo = document.querySelector(loadingLogoSelector);
-		if (loadingLogo) {
-			if (loadingLogo && loadingLogo.getAttribute("d") == twitterLogoD) {
+		const logo = document.querySelector(logoSelector);
+		if (logo) {
+			updateLogo();
+			if (logo && logo.getAttribute("d") == twitterLogoD) {
 				log("Logo is Twitter logo");
-				loadingLogoObserver.disconnect();
+				logoObserver.disconnect();
 			} else {
 				log("Logo has no path");
 			}
@@ -322,12 +324,31 @@ const loadingLogoObserverCallback = (mutationList: MutationRecord[], observer: M
 		}
 	}
 }
-const loadingLogoObserver = new MutationObserver(loadingLogoObserverCallback);
+
+const loginLogoObserverCallback = (mutationList: MutationRecord[], observer: MutationObserver) => {
+	for (let mutation of mutationList) {
+		const loginLogo = document.querySelector(loginLogoSelector);
+		if (loginLogo) {
+			updateLogo(loginLogoSelector);
+			if (loginLogo && loginLogo.getAttribute("d") == twitterLogoD) {
+				log("Login logo is Twitter logo");
+			} else {
+				log("Login logo has no path");
+			}
+		} else {
+			log("Login logo not found");
+		}
+	}
+}
+
+const logoObserver = new MutationObserver(logoObserverCallback);
+const loginLogoObserver = new MutationObserver(loginLogoObserverCallback);
 
 function startLogoObserver() {
-	loadingLogoObserver.observe(document.querySelector(loadingLogoSelector)!, { childList: true, subtree: true });
+	logoObserver.observe(document.body, { childList: true, subtree: true });
+	loginLogoObserver.observe(document.body, { childList: true, subtree: true });
 	logoObserverConnected = true;
-	log("Started logo observer");
+	log("Started global logo observer");
 }
 
 (async () => {
