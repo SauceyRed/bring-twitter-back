@@ -1,6 +1,6 @@
 {
   "name": "bring-twitter-back",
-  "version": "2.4.0",
+  "version": "2.3.5",
   "description": "Turns X back to Twitter.",
   "main": "./dist/index.js",
   "scripts": {
