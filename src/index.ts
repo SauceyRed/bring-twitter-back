@@ -270,7 +270,7 @@ const bodyCallback = (mutationList: MutationRecord[], observer: MutationObserver
 
 		const homeIconResult = document.querySelector(homeIconEmptySelector) || document.querySelector(homeIconFilledSelector);
 		if (homeIconResult && homeIconResult.parentElement && homeIconResult.parentElement.parentElement) {
-			console.log("home icon stuff!");
+			log("home icon stuff!");
 			const iconSvg = homeIconResult.parentElement.parentElement;
 
 			const path = iconSvg.getElementsByTagName("path")[0];
