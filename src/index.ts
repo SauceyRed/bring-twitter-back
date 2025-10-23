@@ -26,6 +26,7 @@ const loadingLogoSelector = 'svg[class="r-4qtqp9 r-yyyyoo r-dnmrzs r-lrvibr r-m6
 const retweetPostOptionsSelector = '[class="css-146c3p1 r-bcqeeo r-1ttztb7 r-qvutc0 r-1qd0xha r-a023e6 r-rjixqe r-b88u0q"]';
 const deletedTweetAlertSelector = 'div[role="alert"][data-testid="toast"]';
 const timelineSelector = 'div[aria-label="Timeline: Your Home Timeline"]';
+const notificationsTimelineSelector = 'div[aria-label="Timeline: Notifications"]';
 
 const homeIconLogo = "M 174.79984,0.062917 349.60422,108.351317 332.85510,135.407597 312.88500,122.201557 312.88500,274.232032 C 312.88500,274.232032 312.24080,307.086072 277.77627,310.629162 243.31173,314.172242 174.79984,310.629162 174.79984,310.629162 Z M 174.80438,0.000000 0.00000,108.288407 16.74912,135.344687 36.71922,122.138647 36.71922,274.169122 C 36.71922,274.169122 37.36342,307.023162 71.82795,310.566252 106.29249,314.109332 174.80438,310.566252 174.80438,310.566252 Z M 228.854139,172.835386 A 53.916889,53.916889 0 1 0 121.020361,172.835386 A 53.916889,53.916889 0 1 0 228.854139,172.835386 Z";
 const homeIconEmptySelector = 'path[d="M21.591 7.146L12.52 1.157c-.316-.21-.724-.21-1.04 0l-9.071 5.99c-.26.173-.409.456-.409.757v13.183c0 .502.418.913.929.913H9.14c.51 0 .929-.41.929-.913v-7.075h3.909v7.075c0 .502.417.913.928.913h6.165c.511 0 .929-.41.929-.913V7.904c0-.301-.158-.584-.408-.758z"]';
@@ -262,6 +263,23 @@ const bodyCallback = (mutationList: MutationRecord[], observer: MutationObserver
 			} else {
 				if (buttons[0].textContent && buttons[0].textContent.includes("posts")) {
 					buttons[0].textContent = buttons[0].textContent.replace("posts", "tweets");
+				}
+			}
+		}
+
+		const notifTimelineResult = document.querySelector(notificationsTimelineSelector);
+		if (notifTimelineResult) {
+			const articles = notifTimelineResult.getElementsByTagName("article");
+			const regex = /(liked|reposted)( \d of)? your (re)?post(s)?/;
+			for (const article of articles) {
+				const actionDiv = article.children[0].children[1].children[1];
+				const spans = actionDiv.getElementsByTagName("span");
+				for (const span of spans) {
+					if (span.textContent && regex.test(span.textContent)) {
+						if (span.textContent.includes("post")) {
+							span.textContent = span.textContent.replaceAll("post", "tweet");
+						}
+					}
 				}
 			}
 		}
