@@ -271,15 +271,27 @@ const bodyCallback = (mutationList: MutationRecord[], observer: MutationObserver
 		if (notifTimelineResult) {
 			const articles = notifTimelineResult.getElementsByTagName("article");
 			const regex = /(liked|reposted)( \d of)? your (re)?post(s)?/;
+			log("articles:", articles.length);
 			for (const article of articles) {
-				const actionDiv = article.children[0].children[1].children[1];
-				const spans = actionDiv.getElementsByTagName("span");
-				for (const span of spans) {
-					if (span.textContent && regex.test(span.textContent)) {
-						if (span.textContent.includes("post")) {
-							span.textContent = span.textContent.replaceAll("post", "tweet");
+				log("article:", article);
+				if (!article.children[0].children[1] || !article.children[0].children[1].children[1]) {
+					log("action div not found for notifications timeline article");
+					continue;
+				};
+
+				try {
+					const actionDiv = article.children[0].children[1].children[1];
+					const spans = actionDiv.getElementsByTagName("span");
+					for (const span of spans) {
+						if (span.textContent && regex.test(span.textContent)) {
+							if (span.textContent.includes("post")) {
+								span.textContent = span.textContent.replaceAll("post", "tweet");
+							}
 						}
 					}
+				} catch (error) {
+					log("Failed to replace text in notifications timeline article:", error);
+					continue;
 				}
 			}
 		}
