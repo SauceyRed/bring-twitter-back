@@ -44,7 +44,7 @@ function delay(ms: number): Promise<void> {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function log(message: string) {
+function log(...message: any) {
 	if (localStorage.getItem(loggingKey) == "true") {
 		console.log(message);
 	}
