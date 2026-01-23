@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Bring Twitter Back",
-	"version": "2.3.6",
+	"version": "2.4.0",
 	"description": "Turns X back to Twitter.",
 	"icons": {
 		"48": "icons/icon.png",
@@ -9,10 +9,24 @@
 	},
 	"content_scripts": [
 		{
-			"matches": ["*://*.twitter.com/*", "*://*.x.com/*"],
-			"js": ["index.js"],
+			"matches": [
+				"*://*.twitter.com/*",
+				"*://*.x.com/*"
+			],
+			"js": [
+				"browser-polyfill.js",
+				"index.js"
+			],
 			"run_at": "document_start"
 		}
+	],
+	"background": {
+		"scripts": [
+			"background.js"
+		]
+	},
+	"permissions": [
+		"storage"
 	],
 	"web_accessible_resources": [
 		"icons/favicon.ico",
@@ -20,6 +34,9 @@
 		"icons/icon.png",
 		"icons/icon@2x.png"
 	],
+	"browser_action": {
+		"default_popup": "popup/popup.html"
+	},
 	"browser_specific_settings": {
 		"gecko": {
 		  "id": "{1af1a448-95f4-46c6-b093-078ea1023f81}",
