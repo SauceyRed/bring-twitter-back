@@ -1,0 +1,23 @@
+body {
+	background-color: hsl(0, 0%, 11%);
+	color: white;
+	font-family: Arial, Helvetica, sans-serif;
+	padding: 1rem;
+	margin: 0;
+}
+
+body, #options {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+h1, h2 {
+	margin: 0;
+	padding: 0;
+}
+
+#title {
+	text-align: center;
+	font-size: 2rem;
+}

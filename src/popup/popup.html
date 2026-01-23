@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="../browser-polyfill.js"></script>
+	<link rel="stylesheet" href="popup.css">
+	<title>Document</title>
+</head>
+<body>
+	<h1 id="title">Settings</h1>
+	<div id="options">
+		<div>
+			<h2>Left sidebar</h2>
+			<div>
+				<label for="remove-nav-grok">Remove "Grok"</label>
+				<input type="checkbox" name="remove-nav-grok" id="remove-nav-grok">
+			</div>
+			<div>
+				<label for="remove-nav-premium">Remove "Premium"</label>
+				<input type="checkbox" name="remove-nav-premium" id="remove-nav-premium">
+			</div>
+		</div>
+		<div>
+			<h2>Right sidebar</h2>
+			<div>
+				<label for="remove-trending">Remove "What's happening"</label>
+				<input type="checkbox" name="remove-trending" id="remove-trending">
+			</div>
+			<div>
+				<label for="remove-follow-suggestions">Remove "Who to follow"</label>
+				<input type="checkbox" name="remove-follow-suggestions" id="remove-follow-suggestions">
+			</div>
+			<div>
+				<label for="remove-todays-news">Remove "Today's News"</label>
+				<input type="checkbox" name="remove-todays-news" id="remove-todays-news">
+			</div>
+		</div>
+	</div>
+	<script src="popup.js"></script>
+</body>
+</html>
