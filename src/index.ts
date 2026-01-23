@@ -40,14 +40,25 @@ if (!localStorage.getItem(loggingKey)) {
 	localStorage.setItem(loggingKey, "false");
 }
 
-function delay(ms: number): Promise<void> {
-	return new Promise(resolve => setTimeout(resolve, ms));
+function log(...data: any[]) {
+	if (localStorage.getItem(loggingKey) == "true") {
+		console.log(...data);
+	}
 }
 
-function log(...message: any) {
-	if (localStorage.getItem(loggingKey) == "true") {
-		console.log(message);
-	}
+let settings: Settings;
+
+const message: Message = {
+	command: "get-settings",
+};
+
+browser.runtime.sendMessage(message).then(s => {
+	console.log("gotten settings:", s);
+	settings = s;
+});
+
+function delay(ms: number): Promise<void> {
+	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function updateFavicon(faviconPath = "icons/favicon.ico") {
