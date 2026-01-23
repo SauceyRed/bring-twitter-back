@@ -20,6 +20,10 @@
   "devDependencies": {
     "@types/chrome": "^0.0.269",
     "@types/firefox-webext-browser": "^120.0.4",
+    "@types/webextension-polyfill": "^0.12.4",
     "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "webextension-polyfill": "^0.12.0"
   }
 }
