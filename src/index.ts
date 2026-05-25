@@ -25,6 +25,15 @@ const cookieBannerSelector = 'div[class="css-146c3p1 r-bcqeeo r-1ttztb7 r-qvutc0
 const loadingLogoSelector = 'svg[class="r-4qtqp9 r-yyyyoo r-dnmrzs r-lrvibr r-m6rgpd r-1p0dtai r-1nao33i r-wy61xf r-zchlnj r-1d2f490 r-ywje51 r-u8s1d r-ipm5af r-1blnp2b"] path';
 const retweetPostOptionsSelector = '[class="css-146c3p1 r-bcqeeo r-1ttztb7 r-qvutc0 r-1qd0xha r-a023e6 r-rjixqe r-b88u0q"]';
 const deletedTweetAlertSelector = 'div[role="alert"][data-testid="toast"]';
+
+function replaceLeafSpanText(root: ParentNode, fromText: string, toText: string): void {
+	const spans = root.querySelectorAll("span");
+	for (const span of spans) {
+		if (span.childElementCount === 0 && span.textContent == fromText) {
+			span.textContent = toText;
+		}
+	}
+}
 const timelineSelector = 'div[aria-label="Timeline: Your Home Timeline"]';
 const notificationsTimelineSelector = 'div[aria-label="Timeline: Notifications"]';
 
@@ -149,17 +158,12 @@ const bodyCallback = (mutationList: MutationRecord[], observer: MutationObserver
 			}
 		}
 
-		const tweetButtonsSelectorResults = document.querySelectorAll(tweetButtonsSelector);
-		if (tweetButtonsSelectorResults) {
-			for (const result of tweetButtonsSelectorResults) {
-				const spans = document.getElementsByTagName("span");
-				for (const span of spans) {
-					if (span.textContent == "Post") {
-						span.textContent = "Tweet";
-					}
+			const tweetButtonsSelectorResults = document.querySelectorAll(tweetButtonsSelector);
+			if (tweetButtonsSelectorResults) {
+				for (const result of tweetButtonsSelectorResults) {
+					replaceLeafSpanText(result, "Post", "Tweet");
 				}
 			}
-		}
 
 		const homeTweetButtonResult = document.querySelector(homeTweetButtonSelector);
 		if (homeTweetButtonResult) {
